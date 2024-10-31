@@ -5,15 +5,47 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Trash Mania</title>
 	<link rel="stylesheet" href="style.css">
-	<script src="scripts.js"></script>
+	<script defer src="scripts.js"></script>
 </head>
 <body>
-	<div class="container">
+	<div class="main-container">
 		<header>
-			<h1>Trash Mania</h1>
+			<img src="./lateral.png" alt="Trash Mania">
 		</header>
-		<main>world</main>
-		<footer></footer>
+		<main>
+			<!-- Google maps API -->
+			 <h2>Ecoponto mais próximo:</h2>
+			 <div class="central-map">
+				 <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27605.18063981073!2d-51.36179198916018!3d-30.13289639999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x951981ae3c64071d%3A0x15da5727e188ebd3!2sEcoponto%20-%20Colina!5e0!3m2!1spt-BR!2sbr!4v1730340074189!5m2!1spt-BR!2sbr" width="500" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+			 </div>
+			 <small>
+				Novos postos serão adicionados em breve.
+			 </small>
+		</main>
+
+		<footer>
+			<h2>Conecte-se:</h2>
+			<div class="divided">
+				<div class="login">
+					<form action="/login">
+						<label for="cnpj">CNPJ (exemplo): </label>
+						<input type="text" name="cpf" id="cnpj">
+						<label for="password-cnpj">Senha: </label>
+						<input type="text" name="pass" id="password-cnpj">
+						<button type="submit" id="cnpj-button">Sou CNPJ</button>
+					</form>
+				</div>
+				<div class="register">
+					<form action="/register">
+						<label for="cpf">CPF (não usar real): </label>
+						<input type="text" name="cpf" id="cpf">
+						<label for="password-register" disabled>Senha: </label>
+						<input type="text" name="pass" id="password-register" disabled>
+						<button type="submit" id="cpf-button">Sou CPF</button>
+					</form>
+				</div>
+			</div>
+		</footer>
 	</div>
 </body>
 </html>
