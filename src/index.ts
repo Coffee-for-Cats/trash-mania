@@ -15,6 +15,8 @@ type region = {
 app.post('/register', async ctx => {
 	const body = await ctx.req.json()
 
+	if(!body.name || body.name == "") return ctx.text("Invalid name")
+
 	const newUser = JSON.stringify({
 		name: body.name,
 		points: 0
@@ -23,7 +25,11 @@ app.post('/register', async ctx => {
 	// salva na lista da region
 	const users_json = (await ctx.env.users.get("region-guaiba")) || "[]";
 	const users = JSON.parse(users_json);
-	users.push({name: body.name});
+	let has = false;
+	for(const u of users) {
+		if(u.name == body.name) has = true;
+	}
+	if(!has) users.push({name: body.name});
 	await ctx.env.users.put("region-guaiba", JSON.stringify(users));
 
 	ctx.env.users.put(body.name, newUser)
@@ -55,7 +61,6 @@ app.get('/ranking', async ctx => {
 	for(const user of allUsers) {
 		const userFromDB = await ctx.env.users.get(user.name)
 		const DBuser = JSON.parse(userFromDB!);
-		console.log(DBuser)
 		users_complete.push(DBuser)
 	}
 

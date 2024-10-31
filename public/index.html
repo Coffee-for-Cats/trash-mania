@@ -37,9 +37,11 @@
 				</div>
 				<div class="register">
 					<form action="/register">
-						<label for="cpf">CPF (não usar real): </label>
+						<label for="cpf">Nome: </label>
 						<input type="text" name="cpf" id="cpf">
-						<label for="password-register" disabled>Senha: </label>
+						<label for="password-register" disabled style="text-decoration: line-through;">Senha: </label>
+						<input type="text" name="pass" id="password-register" disabled>
+						<label for="password-register" disabled style="text-decoration: line-through;">CPF: </label>
 						<input type="text" name="pass" id="password-register" disabled>
 						<button type="submit" id="cpf-button">Sou CPF</button>
 					</form>

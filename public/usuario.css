@@ -34,5 +34,20 @@ span#points {
   margin: 2px;
   display: flex;
   justify-content: center;
-  width: 40%;
+  width: clamp(35%, 22rem, 80%);
+}
+
+.button-aligner {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-aligner > button {
+  border-radius: .2rem;
+  background: none;
+  color: black;
+  border: none;
+  padding: .6rem;
+  margin: .4rem 0 0 0;
 }
