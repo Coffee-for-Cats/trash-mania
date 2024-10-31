@@ -1,19 +1,18 @@
-const isLogged = window.localStorage.getItem("logged-cpf");
-const loggedCPF = JSON.parse(isLogged);
-
-document.getElementById("points").innerText = loggedCPF.points.toString();
+const loggedPoints = window.localStorage.getItem("logged-cpf");
+console.log(loggedPoints)
+document.getElementById("points").innerText = loggedPoints.toString();
 
 let rank_html = "";
 fetch('./ranking').then(async (content) => {
   const ranking = await content.json();
 
-  const users = ranking.users.sort((a, b) => {
-    return a.points > b.points;
+  const users = ranking.sort((a, b) => {
+    return a.points < b.points;
   })
 
-  ranking.users.forEach(user => {
+  users.forEach(user => {
     rank_html = rank_html + `
-    <div>${user.cpf} | ${user.points} pontos.</div>
+    <div>${user.name} | ${user.points} pontos.</div>
     `;
     document.getElementById("ranking").innerHTML = rank_html;
   })

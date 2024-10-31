@@ -5,14 +5,34 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Trash Mania</title>
 	<link rel="stylesheet" href="style.css">
-	<script src="scripts.js"></script>
+	<script defer src="cnpj.js"></script>
 </head>
 <body>
 	<div class="main-container">
 		<header>
 			<img src="./lateral.png" alt="Trash Mania">
 		</header>
-		
+		<main>
+			<h2>Pontuar cidadão:</h2>
+			<div class="pontuar">
+				<form action="/pontuar">
+					<!-- <label for="cpf">CPF (não usar real): </label>
+					<input type="text" name="cpf" id="cpf">
+					<label for="password-register" disabled>Senha: </label>
+					<input type="text" name="pass" id="password-register" disabled>
+					<button type="submit" id="cpf-button">Sou CPF</button> -->
+
+					<label for="name">Nome: </label>
+					<input type="text" name="name" id="name">
+
+					<label for="points">Pontos: </label>
+					<input type="text" name="points" id="points">
+
+					<button type="submit" id="aplicar">Aplicar</button>
+
+				</form>
+			</div>
+		</main>
 		
 	</div>
 </body>

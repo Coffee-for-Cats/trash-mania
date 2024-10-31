@@ -8,63 +8,63 @@ type user = {
 	points: number,
 }
 type region = {
-	users: user[]
+	users: {cpf: string}[]
 }
 
-async function registerUsuario(cpf: string, ctx: any): Promise<user> {
-	const user = JSON.parse(
-		await ctx.env.users.get(cpf)
-	)
-	if(!user) {
-		await ctx.env.users.put(cpf, JSON.stringify({ cpf, points: 0 }))
-			// update da region-guaiba
-		const actualregion = await getRegion(ctx);
-		const newUser: user = {
-			cpf, points: 0,
-		}
-		actualregion.users.push(newUser)
-		await ctx.env.users.put("region-guaiba", JSON.stringify(actualregion))
-	}
-
-
-	return await ctx.env.users.get(cpf)
-}
-
-async function getRegion(ctx: any): Promise<region> {
-	// deveria ser uma tabela separada, com a região de cada usuário e tudo mais.
-	// mas temos pouco tempo, então vai assim msm.
-	const region: region = JSON.parse(await ctx.env.users.get("region-guaiba"));
-	if(!region || !region.users.length) {
-		await ctx.env.users.put("region-guaiba", JSON.stringify({
-			users: [],
-		}))
-	}
-	return JSON.parse(await ctx.env.users.get("region-guaiba")) as region;
-}
 
 app.post('/register', async ctx => {
-	const form = await ctx.req.json();
-	
-	const user = await registerUsuario(form.cpf, ctx)
+	const body = await ctx.req.json()
 
-	// finalizado, bora pra tela!
-	return ctx.json(user)
+	const newUser = JSON.stringify({
+		name: body.name,
+		points: 0
+	})
+
+	// salva na lista da region
+	const users_json = (await ctx.env.users.get("region-guaiba")) || "[]";
+	const users = JSON.parse(users_json);
+	users.push({name: body.name});
+	await ctx.env.users.put("region-guaiba", JSON.stringify(users));
+
+	ctx.env.users.put(body.name, newUser)
+	return ctx.text(newUser)
 })
 
-// app.get('/user', async ctx => {
-// 	const form = await ctx.req.json();
-// })
+app.post('/darpontos', async ctx => {
+	const body = await ctx.req.json()
 
-app.post('/dar-pontos', async ctx => {
-	const form = await ctx.req.json();
+	const userJson = await ctx.env.users.get(body.name)
+	if(!userJson) return ctx.text("Doesn't exist");
+	const user = JSON.parse(userJson)
+	user.points += Number.parseInt(body.points) || 10;
+	await ctx.env.users.put(body.name, JSON.stringify(user))
 
-	const user = await registerUsuario(form.cpf, ctx)
-	user.points += form.toAdd;
+	return ctx.json(JSON.parse(await ctx.env.users.get(body.name) || '{}'))
 })
 
 app.get('/ranking', async ctx => {
-	const list = await getRegion(ctx);
-	return ctx.json(list)
+	const json_allUsers = await ctx.env.users.get('region-guaiba')
+
+	if(!json_allUsers) {
+		await ctx.env.users.put('region-guaiba', JSON.stringify([]));
+		return ctx.json([])
+	}
+	const allUsers: any[] = JSON.parse(json_allUsers);
+
+	const users_complete = [];
+	for(const user of allUsers) {
+		const userFromDB = await ctx.env.users.get(user.name)
+		const DBuser = JSON.parse(userFromDB!);
+		console.log(DBuser)
+		users_complete.push(DBuser)
+	}
+
+	return ctx.json(users_complete)
+})
+
+app.post('/reset', async ctx => {
+	await ctx.env.users.delete('region-guaiba')
+	return ctx.text("Done.")
 })
 
 export default app
